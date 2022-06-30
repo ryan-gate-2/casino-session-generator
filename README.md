@@ -3,6 +3,8 @@ Using Laravel (ofcourse), these snippets make it possible to easily generate dem
 
 [Click to generate a session (soon off or might be off at time of trying)](https://pix-api.pointdns.rest/retrieveDemoURL?gameID=1x2gaming:BarbarianGold&origin_target=bets.io)
 
+[Click to start real money sessoin, proxied using this snippets][http://vps-70325c4a.vps.ovh.net/api/bets.io_cookied/games/pragmaticexternal/TheDogHouse/29876]
+
 ![Proxied Realmoney Session](https://i.imgur.com/DAtU7uh.png)
 
 *Proxied Real-money Gamesession*
