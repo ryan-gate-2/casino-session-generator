@@ -1,8 +1,8 @@
 ## Casino Session Generator with PROXY SUPPORT
 Using Laravel (ofcourse), these snippets make it possible to easily generate demo & real-money game sessions on DAMA N.V. Casino's (centrifuge).
 
+![Proxied Realmoney Session](https://i.imgur.com/RP4373v.png)*Proxied Real-money Gamesession*
 
-![Session generation](https://i.imgur.com/RP4373v.png)*Session Generator*
 
 ## What is this
 These games can and are being edited, so you can do yourself aswell if you wish to start your own casino business.
@@ -28,7 +28,7 @@ Proxy files is to be installed on external box, place the included 2 proxy scrip
 ## Gamelist Scrape & Import
 However you can get nice info's that you can use on your copied/grey games like the tournament information on pragmaticplay etc etc.
 
-![Gamelist Import][https://i.imgur.com/0shHFTj.png]
+![Gamelist Import](https://i.imgur.com/RP4373v.png)*Scrape softswiss formatted gamelist and import to local database*
 
 After added both the game-importer & session-creator to your routes/api.php, you use following queries:
 
@@ -56,6 +56,7 @@ In below example the snippet will search in your local database for game ID and 
 Softswiss doing the big fraud makes it so that all games are wrapped in their fraudulant casino's & centrifuges on their external page, this page does include the session url's.
 
 However you can get nice info's that you can use on your copied/grey games like the tournament information on pragmaticplay etc etc.
+![Session generation](https://i.imgur.com/RP4373v.png)*Session Generator*
 
 
 ```
@@ -112,7 +113,6 @@ Proxy routes:
 
 Example of a cookie route on bets.io, you should make a helper to keep the cookie 'alive':
 
-[Proxied Realmoney Session][https://i.imgur.com/DAtU7uh.png]
 
 ```php
     Route::match(['get', 'post', 'head', 'patch', 'put', 'delete'] , 'bets.io_cookied/{slug}', function(Request $request){
