@@ -41,7 +41,7 @@ After added both the game-importer & session-creator to your routes/api.php, you
 
 In below example query, script will use the 'offline' stored gamelist.json (right now set to some gitlabs, you should store these yourself)
 
-```
+```json
 ## yoururl.com/api/game-importer?import=1&origin_target=bets.io&clean=1&origin_proxied=1
 
 Parameters:
@@ -66,7 +66,7 @@ However you can get nice info's that you can use on your copied/grey games like 
 ![Session generation](https://i.imgur.com/RP4373v.png)*Session Generator*
 
 
-```
+```json
 ## yoururl.com/api/session-generator?gameID=1x2gaming:BarbarianGold&origin_target=bets.io
 
 Parameters:
