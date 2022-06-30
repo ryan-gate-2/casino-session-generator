@@ -41,16 +41,16 @@ After added both the game-importer & session-creator to your routes/api.php, you
 
 In below example query, script will use the 'offline' stored gamelist.json (right now set to some gitlabs, you should store these yourself)
 
-```json
+```
 ## yoururl.com/api/game-importer?import=1&origin_target=bets.io&clean=1&origin_proxied=1
+```
 
 Parameters:
-    - import=1  | Toggle to 0 or remove completely from query to just see the result (dry-run'ish)
-    - origin_target={casinoID}  | Basically the vector where to retrieve gamelists and create sessions, you should probably setup around 10        casino's so you got access to all games & 
-    - clean=1  | Clean means it will delete the previous records in your local database for the specific origin_target, it will not remove/clean games from other origin_targets, if you set this 0 you have a big chance on tons and tons of duplicates
-    - raw_list_output=0  | This will instead return the raw gamelist as it is scraped, instead of the transformed gamelist array
-    - origin_proxied=1  | Use proxy / external server to retrieve LIVE gamelist from specific casino, make sure this server is in a preferential geo-location (germany)
-```
+    [] import=1  | Toggle to 0 or remove completely from query to just see the result (dry-run'ish)
+    [] origin_target={casinoID}  | Basically the vector where to retrieve gamelists and create sessions, you should probably setup around 10        casino's so you got access to all games & 
+    [] clean=1  | Clean means it will delete the previous records in your local database for the specific origin_target, it will not remove/clean games from other origin_targets, if you set this 0 you have a big chance on tons and tons of duplicates
+    [] raw_list_output=0  | This will instead return the raw gamelist as it is scraped, instead of the transformed gamelist array
+    [] origin_proxied=1  | Use proxy / external server to retrieve LIVE gamelist from specific casino, make sure this server is in a preferential geo-location (germany)
 
 
 ## Casino Game Session Generator
