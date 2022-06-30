@@ -2,8 +2,7 @@
 Using Laravel (ofcourse), these snippets make it possible to easily generate demo & real-money game sessions on DAMA N.V. Casino's (centrifuge).
 
 
-![Session Generation][https://i.imgur.com/RP4373v.png]
-
+![Session generation](https://i.imgur.com/RP4373v.png)*Session Generator*
 
 ## What is this
 These games can and are being edited, so you can do yourself aswell if you wish to start your own casino business.
