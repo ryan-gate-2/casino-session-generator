@@ -28,7 +28,8 @@ Proxy files is to be installed on external box, place the included 2 proxy scrip
 ## Gamelist Scrape & Import
 However you can get nice info's that you can use on your copied/grey games like the tournament information on pragmaticplay etc etc.
 
-![Gamelist Import](https://i.imgur.com/0shHFTj.png)*Scrape softswiss formatted gamelist and import to local database*
+![Gamelist Import](https://i.imgur.com/0shHFTj.png)
+*Scrape softswiss formatted gamelist and import to local database*
 
 After added both the game-importer & session-creator to your routes/api.php, you use following queries:
 
