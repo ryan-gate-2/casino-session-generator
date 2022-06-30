@@ -1,12 +1,11 @@
-# Casino Session Generator
+## Casino Session Generator with PROXY SUPPORT
 Using Laravel (ofcourse), these snippets make it possible to easily generate demo & real-money game sessions on DAMA N.V. Casino's (centrifuge).
 
-These snippets are not ready for production but simply is to show how/where/what to generate sessions, including proxy support (different geo locations to be able to launch as many games as possible).
 
-My suggestion is if you are to use this for Softswiss game generation is to pick Germany based VPS/servers as Softswiss hosts mainly on Hetzner.de which is german based and thus seems more lenient.
+![Session Generation][https://i.imgur.com/RP4373v.png]
 
-#What is this
-These snippets make it possible to create gamelists from casino's and after importing these to launch gamesessions, with proxy support. 
+
+## What is this
 These games can and are being edited, so you can do yourself aswell if you wish to start your own casino business.
 
 Right now in these snippets is support for launching session & gamelist scraping:
@@ -18,7 +17,7 @@ Right now in these snippets is support for launching session & gamelist scraping
 But, there are hundreds casino's using softswiss gamelist format.
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-#Setup 
+## Setup 
 Setup laravel base and add game-importer and so on together into your routes/api.php.
 
 Insert .sql file.
@@ -28,8 +27,9 @@ The proxy should be setup on external box. The game session creator will first t
 Proxy files is to be installed on external box, place the included 2 proxy scripts to /App/Helpers and register this in your /App/Providers/AppServiceProvider.php (will upload this).
 
 ## Gamelist Scrape & Import
-
 However you can get nice info's that you can use on your copied/grey games like the tournament information on pragmaticplay etc etc.
+
+![Gamelist Import][https://i.imgur.com/0shHFTj.png]
 
 After added both the game-importer & session-creator to your routes/api.php, you use following queries:
 
@@ -75,6 +75,8 @@ Parameters:
 ## Proxy 
 Setup laravel on external box, place ProxyHelper.php & ProxyHelperFacade.php /App/Helpers/, create this directory if you need to.
 
+My suggestion is if you are to use this for Softswiss game generation is to pick Germany based VPS/servers as Softswiss hosts mainly on Hetzner.de which is german based and thus seems more lenient.
+
 After go to the file: `App\Providers\AppServiceProvider.php` and in the method `register()` adds the facade:
 ```php
 $this->app->bind('ProxyHelper', function($app) {
@@ -111,6 +113,8 @@ Proxy routes:
 
 Example of a cookie route on bets.io, you should make a helper to keep the cookie 'alive':
 
+[Proxied Realmoney Session][https://i.imgur.com/DAtU7uh.png]
+
 ```php
     Route::match(['get', 'post', 'head', 'patch', 'put', 'delete'] , 'bets.io_cookied/{slug}', function(Request $request){
         $cookie = 'referral_params=eJwrSk0szs+zTU/MTY0vSi0uKcpMLklNic/Mi0/OL80rKaoEAOQvDaE=; dateamlutsk-_zldp=M6KbIcofZ5OdbzCklHE/wT4m8vct0Wfje3KHtA0uoRoY8NE801Jy2Psphbw8i4k+WGzG+PDOVsw=; dateamlutsk-_zldt=7698a211-3f3c-4241-b261-240e437d0678-0; locale=ImVuIg$
@@ -124,3 +128,6 @@ Example of a cookie route on bets.io, you should make a helper to keep the cooki
 
     })->where('slug', '([A-Za-z0-9\-\/]+)');
 ```
+
+
+
