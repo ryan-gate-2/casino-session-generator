@@ -1,92 +1,126 @@
 # Casino Session Generator
+Using Laravel (ofcourse), these snippets make it possible to easily generate demo & real-money game sessions on DAMA N.V. Casino's (centrifuge).
 
+These snippets are not ready for production but simply is to show how/where/what to generate sessions, including proxy support (different geo locations to be able to launch as many games as possible).
 
+My suggestion is if you are to use this for Softswiss game generation is to pick Germany based VPS/servers as Softswiss hosts mainly on Hetzner.de which is german based and thus seems more lenient.
 
-## Getting started
+#What is this
+These snippets make it possible to create gamelists from casino's and after importing these to launch gamesessions, with proxy support. 
+These games can and are being edited, so you can do yourself aswell if you wish to start your own casino business.
 
+Right now in these snippets is support for launching session & gamelist scraping:
+- [Bitstarz.com](https://www.bitstarz.com/)  (best for real money game sessions)
+- [Arlekincasino.com](https://www.arlekincasino.com/)
+- [Duxcasino.com](https://www.duxcasino.com)
+- [Bets.io](https://bets.io) (best for demo game sessions)
+
+But, there are hundreds casino's using softswiss gamelist format.
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+#Setup 
+Setup laravel base and add game-importer and so on together into your routes/api.php.
 
-## Add your files
+Insert .sql file.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+The proxy should be setup on external box. The game session creator will first try to start session locally if fails to create session (mostly due to geo-locks based on I.P. of your server), it will send a proxy support. 
+
+Proxy files is to be installed on external box, place the included 2 proxy scripts to /App/Helpers and register this in your /App/Providers/AppServiceProvider.php (will upload this).
+
+## Gamelist Scrape & Import
+
+However you can get nice info's that you can use on your copied/grey games like the tournament information on pragmaticplay etc etc.
+
+After added both the game-importer & session-creator to your routes/api.php, you use following queries:
+
+In below example query, script will use the 'offline' stored gamelist.json (right now set to some gitlabs, you should store these yourself)
 
 ```
-cd existing_repo
-git remote add origin https://gitgud.io/hophopman/casino-session-generator.git
-git branch -M master
-git push -uf origin master
+## yoururl.com/api/game-importer?import=1&origin_target=bets.io&clean=1&origin_proxied=1
+
+Parameters:
+    - import=1  | Toggle to 0 or remove completely from query to just see the result (dry-run'ish)
+    - origin_target={casinoID}  | Basically the vector where to retrieve gamelists and create sessions, you should probably setup around 10        casino's so you got access to all games & 
+    - clean=1  | Clean means it will delete the previous records in your local database for the specific origin_target, it will not remove/clean games from other origin_targets, if you set this 0 you have a big chance on tons and tons of duplicates
+    - raw_list_output=0  | This will instead return the raw gamelist as it is scraped, instead of the transformed gamelist array
+    - origin_proxied=1  | Use proxy / external server to retrieve LIVE gamelist from specific casino, make sure this server is in a preferential geo-location (germany)
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitgud.io/hophopman/casino-session-generator/-/settings/integrations)
+## Casino Game Session Generator
+NOTE: the real money sessions really only can be used and should be used with your own gameserver (taking their fraud games and basically do same as them) as these gamesession url's are redirected & in most cases not a real valid money session but a demo session.
 
-## Collaborate with your team
+If you are going to use real-money sessions, the importer script will import game_ids for specific currencies.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+In below example the snippet will search in your local database for game ID and the origin_target. The snippet will always first try and launch local
 
-## Test and Deploy
+Softswiss doing the big fraud makes it so that all games are wrapped in their fraudulant casino's & centrifuges on their external page, this page does include the session url's.
 
-Use the built-in continuous integration in GitLab.
+However you can get nice info's that you can use on your copied/grey games like the tournament information on pragmaticplay etc etc.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
+```
+## yoururl.com/api/session-generator?gameID=1x2gaming:BarbarianGold&origin_target=bets.io
 
-# Editing this README
+Parameters:
+    - gameID=1x2gaming:BarbarianGold   | your local game id session stored in local database (done by importer)
+    - origin_target=bets.io  | The casino/vector to generate the game at, the proxy also shows example of a cookied request.
+    - redirect=to_origin_wrapper | Pick between "to_game_url", "to_origin_wrapper", "to_proxied_wrapper". This will redirect immediately after succesfull session generation, however do not put this snippets to public, however it can be handy testing yourself or to run grey-games. This is unset by default. 
+    - load_content=1  | This will import the source of game to index.php
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## Proxy 
+Setup laravel on external box, place ProxyHelper.php & ProxyHelperFacade.php /App/Helpers/, create this directory if you need to.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+After go to the file: `App\Providers\AppServiceProvider.php` and in the method `register()` adds the facade:
+```php
+$this->app->bind('ProxyHelper', function($app) {
+    return new ProxyHelper();
+});
+```
+Remember that you need to import the class (not the one called facade) in `App\Providers\AppServiceProvider.php`
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```php
+use App\Helpers\ProxyHelper; //or your path
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Proxy routes:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```php
+    Route::match(['get', 'post', 'head', 'patch', 'put', 'delete'] , 'proxy/{slug}', function(Request $request){
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+        // To redirect the request to a different host, the first parameter will be the host.
+        // the second, will be the current path that we want to ignore, it must be the url of the controller (api/proxy)
+        //so we're telling you that the new url will be:
+        // (host) http://my.server2.test + (deleted)[api/proxy] + ({slug}) /api/avatar/color
+        return ProxyHelperFacade::CreateProxy($request)->toHost('http://my.server2.test','api/proxy');
+        
+        //other way is to tell him the url directly.
+        return ProxyHelperFacade::CreateProxy($request)->toUrl('http://my.server2.test/api/avatar/color');
+        
+        // this second way will no longer be dynamic.
+        
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+    })->where('slug', '([A-Za-z0-9\-\/]+)');
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Example of a cookie route on bets.io, you should make a helper to keep the cookie 'alive':
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```php
+    Route::match(['get', 'post', 'head', 'patch', 'put', 'delete'] , 'bets.io_cookied/{slug}', function(Request $request){
+        $cookie = 'referral_params=eJwrSk0szs+zTU/MTY0vSi0uKcpMLklNic/Mi0/OL80rKaoEAOQvDaE=; dateamlutsk-_zldp=M6KbIcofZ5OdbzCklHE/wT4m8vct0Wfje3KHtA0uoRoY8NE801Jy2Psphbw8i4k+WGzG+PDOVsw=; dateamlutsk-_zldt=7698a211-3f3c-4241-b261-240e437d0678-0; locale=ImVuIg$
+        return ProxyHelperFacade::CreateProxy($request)
+                // add a header before sending the request
+                ->withHeaders(['cookie' => $cookie])
+                // add a Bearer token (this is useful for the client not to have the token, and from the intermediary proxy we add it.
+                //Maintain the query of the url.
+                ->preserveQuery(true)
+                ->toHost('https://api.bets.io','api/bets.io_cookied');
 
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+    })->where('slug', '([A-Za-z0-9\-\/]+)');
+```
